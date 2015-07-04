@@ -1,0 +1,142 @@
+//-------------------------------------------------------------------------
+//    Ball.sv                                                            --
+//    Viral Mehta                                                        --
+//    Spring 2005                                                        --
+//                                                                       --
+//    Modified by Stephen Kempf 03-01-2006                               --
+//                              03-12-2007                               --
+//    Translated by Joe Meng    07-07-2013                               --
+//    Fall 2014 Distribution                                             --
+//                                                                       --
+//    For use with ECE 298 Lab 7                                         --
+//    UIUC ECE Department                                                --
+//-------------------------------------------------------------------------
+
+
+module  player ( input Reset, frame_clk,
+					input [7:0]   keycode, 
+					input  		  id,	  
+               output [9:0]  playerX, playerY);
+    
+	 // Player state 
+	 logic 		 is_alive;
+	 logic [3:0] bomb_count;
+	 logic [3:0] bomb_power;
+	 // Player position, speed within 480 x 640
+	 logic [9:0] player_X_pos;
+	 logic [9:0] player_Y_pos;
+	 logic [9:0] player_X_speed;
+	 logic [9:0] player_Y_speed;
+    
+	 // Initial set up
+	 logic [9:0] player_X_pos_init; 
+	 assign player_X_pos_init =id?160:480;      
+    logic [9:0] player_Y_pos_init;
+	 assign player_Y_pos_init =id?120:360;
+    parameter [9:0] player_X_speed_init =1;      
+    parameter [9:0] player_Y_speed_init =1;      
+	 parameter [3:0] bomb_count_init =1;      
+    parameter [3:0] bomb_power_init =1;
+
+	 // Player size
+	 parameter [3:0] width = 10'd64;
+	 parameter [3:0] height = 10'd48;
+	 
+	 // Window size
+	 parameter [9:0] window_X_min=0;       // Leftmost point on the X axis
+    parameter [9:0] window_X_max=639;     // Rightmost point on the X axis
+    parameter [9:0] window_Y_min=0;       // Topmost point on the Y axis
+    parameter [9:0] window_Y_max=479;     // Bottommost point on the Y axis
+	 
+	 // KeyBoard Input
+	 logic [7:0] UP, DOWN, LEFT, RIGHT, RELEASE;
+	 
+	 parameter [7:0] W = 8'h1A;			 // W
+	 parameter [7:0] S = 8'h16;		 // S
+    parameter [7:0] A = 8'h04;		 // A
+	 parameter [7:0] D = 8'h07;		 // D 
+	 parameter [7:0] SPACE = 8'hC;		// Space 
+	 
+	 parameter [7:0] A_UP = 8'h52;			 // Arrow up
+	 parameter [7:0] A_DOWN = 8'h51;		 // Arrow down
+    parameter [7:0] A_LEFT = 8'h50;		 // Arrow left
+	 parameter [7:0] A_RIGHT = 8'h4F;		 // Arrow rigt
+	 parameter [7:0] ENTER = 8'h28;		 // Enter
+	  
+	 assign UP = id?W:A_UP;
+	 assign DOWN = id?S:A_DOWN;
+	 assign LEFT = id?A:A_LEFT;
+	 assign RIGHT = id?D:A_RIGHT;
+	 assign RELEASE = id?SPACE:ENTER;
+	 // delta value 
+    logic [9:0] player_X_motion, player_Y_motion;  
+	 
+    always_ff @ (posedge Reset or posedge frame_clk )
+    begin: Update_Player
+        if (Reset)  // Asynchronous Reset
+        begin
+				is_alive <= 1'b1;
+            bomb_count <= bomb_count_init; 
+				bomb_power <= bomb_power_init; 
+				player_X_pos <= player_X_pos_init;
+				player_Y_pos <= player_Y_pos_init;
+				player_X_speed <= player_X_speed_init;
+				player_Y_speed <= player_Y_speed_init;
+        end
+           
+        else 
+        begin 
+            if ( (player_Y_pos + height) >= window_Y_max && keycode == DOWN)  // Ball is at the bottom edge, STOP!
+			        player_Y_motion <= 10'd0;  
+		  
+				else if ( (player_Y_pos - height) <= window_Y_min && keycode == UP)  // Ball is at the top edge, STOP!
+					player_Y_motion <= 10'd0;
+		 
+				else if ( (player_X_pos + width) >= window_X_max && keycode == RIGHT)  // Ball is at the right edge, STOP!
+					player_X_motion <= 10'd0;
+			
+				else if ( (player_X_pos - width) <= window_X_min && keycode == LEFT)  // Ball is at the left edge, STOP!
+					player_X_motion <= 10'd0;
+				else begin
+					 // Ball is within boundry
+					 unique case(keycode)
+					 	   UP: begin
+					 			player_X_motion <= 10'd0;
+					 			player_Y_motion <= (~ (player_Y_speed) + 1'b1);
+							end
+							
+							DOWN: begin									
+								player_X_motion <= 10'd0;
+								player_Y_motion <= player_Y_speed;
+							end
+							
+							LEFT: begin									
+								player_X_motion <= (~ (player_X_speed) + 1'b1);
+								player_Y_motion <= 10'd0;
+							end
+							
+							RIGHT: begin								
+								player_X_motion <= player_X_speed;
+								player_Y_motion <= 10'd0;
+							end
+							
+							default: begin
+								player_X_motion <= 10'd0;
+								player_Y_motion <= 10'd0;
+							end
+					 endcase
+				 end
+				 
+				 // Update player position
+				 player_Y_pos <= (player_Y_pos + player_Y_motion);  
+				 player_X_pos <= (player_X_pos + player_X_motion);
+				 
+		  end  
+    end
+       
+    assign playerX = player_X_pos;
+   
+    assign playerY = player_Y_pos;
+    
+
+endmodule

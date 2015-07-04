@@ -1,0 +1,126 @@
+module graphics(//input [299:0]  	map, */
+					 input [9:0] 		PlayerXp1, PlayerYp1, DrawX, DrawY,
+					 output logic [7:0]  Red, Green, Blue,
+					 output logic [9:0] DistXs, DistYs,
+					 output logic [3:0] mapx,mapy);
+
+enum logic [2:0] {EMPTY, WALL, BRICK, BOMB, WAVE, MONSTER} object;
+
+
+//map index according to drawx and drawy
+logic [3:0] map [2:0];
+//logic [3:0] mapx,mapy;
+assign mapx = DrawX / 10'd64;
+assign mapy = DrawY / 10'd48;
+assign map = '{1'd1,1'd1,1'd1,1'd1,1'd1,1'd1,1'd1,3'd1};
+
+logic 	player_on,wall_on,brick_on,bomb_on,wave_on,monster_on,empty_on;
+
+logic[7:0] P_Red, P_Green, P_Blue;
+logic[7:0] S_Red, S_Green, S_Blue;
+logic[7:0] B_Red, B_Green, B_Blue;
+logic[7:0] BB_Red, BB_Green, BB_Blue;
+logic[7:0] W_Red, W_Green, W_Blue;
+logic[7:0] M_Red, M_Green, M_Blue;
+
+
+logic[11:0] spriteindex;
+//logic[9:0] DistXs, DistYs;
+assign spriteindex = DistXs + (9'd64*DistYs); 
+assign DistXs = DrawX % 10'd64;
+assign DistYs = DrawY % 10'd48;
+
+
+
+
+    always_comb
+    begin:Select_Object
+			player_on = 1'b0;
+			wall_on = 1'b0;
+			brick_on = 1'b0;
+			bomb_on = 1'b0;
+			wave_on = 1'b0;
+			monster_on = 1'b0;
+			empty_on = 1'b0;
+	 
+        if ( map[mapx] == 3'd1 ) 
+            begin 
+					wall_on = 1'b1; 
+				end 
+		  else if ( map[mapx] == 3'd2 ) 
+				begin 
+					brick_on = 1'b1; 
+				end 
+		  else if ( map[mapx] == 3'd3 )
+				begin 
+					bomb_on = 1'b1; 
+				end 
+		  else if ( map[mapx] == 3'd4 )
+				begin 
+					wave_on = 1'b1; 
+				end 
+		  else if ( map[mapx] == 3'd5 )
+				begin 
+					monster_on = 1'b1; 
+				end 
+		  else 
+				begin 
+					empty_on = 1'b1; 
+				end 
+     end 
+
+
+
+	      
+    always_comb
+    begin:RGB_Display
+        if ((player_on == 1'b1)) 
+        begin 
+            Red = P_Red;   //sit the color from color_table
+            Green = P_Green;
+            Blue = P_Blue;
+        end       
+        else if((wall_on == 1'b1)) 
+		  begin
+				Red = S_Red;   //sit the color from color_table
+            Green = S_Green;
+            Blue = S_Blue;	
+		  end	 
+		  else if((brick_on == 1'b1)) 
+		  begin
+				Red = B_Red;   //sit the color from color_table
+            Green = B_Green;
+            Blue = B_Blue;	
+		  end
+		  else if((bomb_on == 1'b1)) 
+		  begin
+				Red = BB_Red;   //sit the color from color_table
+            Green = BB_Green;
+            Blue = BB_Blue;	
+		  end
+		  else if((wave_on == 1'b1)) 
+		  begin
+				Red = W_Red;   //sit the color from color_table
+            Green = W_Green;
+            Blue = W_Blue;	
+		  end
+		  else if((monster_on == 1'b1)) 
+		  begin
+				Red = M_Red;   //sit the color from color_table
+            Green = M_Green;
+            Blue = M_Blue;	
+		  end
+		  else begin 
+            Red = 8'd0; 
+            Green = 8'd93;
+            Blue = 8'd9;
+        end      
+    end 
+    
+font_rom  font_rom_1(.addr(spriteindex),.ROM_RED(P_Red), .ROM_GREEN(P_Green), .ROM_BLUE(P_Blue));
+
+brick  brick1(.addr(spriteindex), .BRICK_RED(B_Red), .BRICK_GREEN(B_Green), .BRICK_BLUE(B_Blue));
+	 
+silver silver1(.addr(spriteindex), .SILVER_RED(S_Red), .SILVER_GREEN(S_Green), .SILVER_BLUE(S_Blue));
+
+endmodule

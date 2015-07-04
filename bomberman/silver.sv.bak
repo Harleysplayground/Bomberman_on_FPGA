@@ -1,0 +1,2 @@
+module brick(input[11:0]addr, 
+		output logic [7:0] BRICK_RED, BRICK_GREEN, BRICK_BLUE);

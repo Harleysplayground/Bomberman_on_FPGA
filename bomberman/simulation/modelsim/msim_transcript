@@ -1,0 +1,103 @@
+# Reading D:/quartus/modelsim_ase/tcl/vsim/pref.tcl 
+# ERROR: No extended dataflow license exists
+# do bomberman_run_msim_rtl_systemverilog.do 
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Copying D:\quartus\modelsim_ase\win32aloem/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# ** Warning: Copied D:\quartus\modelsim_ase\win32aloem/../modelsim.ini to modelsim.ini.
+#          Updated modelsim.ini.
+# 
+# vlog -sv -work work +incdir+D:/Users/lucas/Dropbox/lucas/study/courses/ece385/final_project_local/bomberman {D:/Users/lucas/Dropbox/lucas/study/courses/ece385/final_project_local/bomberman/bob.sv}
+# Model Technology ModelSim ALTERA vlog 10.1e Compiler 2013.06 Jun 12 2013
+# -- Compiling module bob
+# 
+# Top level modules:
+# 	bob
+# vlog -sv -work work +incdir+D:/Users/lucas/Dropbox/lucas/study/courses/ece385/final_project_local/bomberman {D:/Users/lucas/Dropbox/lucas/study/courses/ece385/final_project_local/bomberman/game.sv}
+# Model Technology ModelSim ALTERA vlog 10.1e Compiler 2013.06 Jun 12 2013
+# -- Compiling module game
+# 
+# Top level modules:
+# 	game
+# vlog -sv -work work +incdir+D:/Users/lucas/Dropbox/lucas/study/courses/ece385/final_project_local/bomberman {D:/Users/lucas/Dropbox/lucas/study/courses/ece385/final_project_local/bomberman/bomberman.sv}
+# Model Technology ModelSim ALTERA vlog 10.1e Compiler 2013.06 Jun 12 2013
+# -- Compiling module bomberman
+# 
+# Top level modules:
+# 	bomberman
+# vlog -sv -work work +incdir+D:/Users/lucas/Dropbox/lucas/study/courses/ece385/final_project_local/bomberman {D:/Users/lucas/Dropbox/lucas/study/courses/ece385/final_project_local/bomberman/HexDriver.sv}
+# Model Technology ModelSim ALTERA vlog 10.1e Compiler 2013.06 Jun 12 2013
+# -- Compiling module HexDriver
+# 
+# Top level modules:
+# 	HexDriver
+# vlog -sv -work work +incdir+D:/Users/lucas/Dropbox/lucas/study/courses/ece385/final_project_local/bomberman {D:/Users/lucas/Dropbox/lucas/study/courses/ece385/final_project_local/bomberman/player.sv}
+# Model Technology ModelSim ALTERA vlog 10.1e Compiler 2013.06 Jun 12 2013
+# -- Compiling module player
+# 
+# Top level modules:
+# 	player
+# vlib usb_system
+# ** Warning: (vlib-34) Library already exists at "usb_system".
+# 
+# vmap usb_system usb_system
+# Modifying modelsim.ini
+# 
+# vlog -sv -work work +incdir+D:/Users/lucas/Dropbox/lucas/study/courses/ece385/final_project_local/bomberman {D:/Users/lucas/Dropbox/lucas/study/courses/ece385/final_project_local/bomberman/game_bench.sv}
+# Model Technology ModelSim ALTERA vlog 10.1e Compiler 2013.06 Jun 12 2013
+# -- Compiling module game_bench
+# 
+# Top level modules:
+# 	game_bench
+# 
+# vsim -t 1ps -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneive_ver -L rtl_work -L work -L usb_system -voptargs="+acc"  game_bench
+# vsim -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneive_ver -L rtl_work -L work -L usb_system -voptargs=\"+acc\" -t 1ps game_bench 
+# Loading sv_std.std
+# Loading work.game_bench
+# Loading work.game
+# Loading work.player
+# Loading work.bob
+# 
+# do D:/Users/lucas/Dropbox/lucas/study/courses/ece385/final_project_local/bomberman/simulation/modelsim/wave.do
+# onerror {resume}
+# quietly WaveActivateNextPane {} 0
+# add wave -noupdate /game_bench/clk
+# add wave -noupdate /game_bench/reset
+# add wave -noupdate -radix unsigned /game_bench/game1/over
+# add wave -noupdate -radix hexadecimal /game_bench/keycode
+# add wave -noupdate -radix unsigned /game_bench/game1/command
+# add wave -noupdate -radix unsigned /game_bench/playerX
+# add wave -noupdate -radix unsigned /game_bench/playerY
+# add wave -noupdate -radix unsigned /game_bench/game1/bomb_state
+# add wave -noupdate -radix unsigned /game_bench/game1/bomb_x
+# add wave -noupdate -radix unsigned /game_bench/game1/bomb_y
+# add wave -noupdate /game_bench/game1/map
+# add wave -noupdate -radix unsigned /game_bench/game1/monsterX
+# add wave -noupdate -radix unsigned /game_bench/game1/monsterY
+# add wave -noupdate -radix unsigned /game_bench/game1/pre_monsterX
+# add wave -noupdate -radix unsigned /game_bench/game1/pre_monsterY
+# add wave -noupdate /game_bench/game1/monster_command
+# add wave -noupdate -radix unsigned /game_bench/game1/monster_counter
+# TreeUpdate [SetDefaultTree]
+# WaveRestoreCursors {{Cursor 1} {3059 ps} 0}
+# quietly wave cursor active 1
+# configure wave -namecolwidth 276
+# configure wave -valuecolwidth 110
+# configure wave -justifyvalue left
+# configure wave -signalnamewidth 0
+# configure wave -snapdistance 10
+# configure wave -datasetprefix 0
+# configure wave -rowmargin 4
+# configure wave -childrowmargin 2
+# configure wave -gridoffset 0
+# configure wave -gridperiod 1
+# configure wave -griddelta 40
+# configure wave -timeline 0
+# configure wave -timelineunits ms
+# update
+# WaveRestoreZoom {0 ps} {29314 ps}
+run 1000 ns
